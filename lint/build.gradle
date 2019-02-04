@@ -1,0 +1,7 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+apply from: rootProject.file("gradle/maven_publish.gradle")
+
+dependencies {
+    compileOnly deps.kotlin
+}
