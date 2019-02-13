@@ -5,6 +5,10 @@ apply from: rootProject.file("gradle/maven_publish.gradle")
 configurations { lintJar }
 
 jar {
+    manifest {
+        attributes('Lint-Registry-v2': 'databinding.lint.DataBindingIssueRegistry')
+    }
+
     from {
         configurations.lintJar.collect {
             it.isDirectory() ? it : zipTree(it)
