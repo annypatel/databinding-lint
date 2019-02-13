@@ -20,4 +20,6 @@ dependencies {
 
     testImplementation deps.junit
     testImplementation deps.lint.test
+    testImplementation(deps.databinding) { transitive = false }
+    testImplementation(deps.antlr) { transitive = false }
 }
