@@ -2,6 +2,22 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply from: rootProject.file("gradle/maven_publish.gradle")
 
+configurations { lintJar }
+
+jar {
+    from {
+        configurations.lintJar.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
 dependencies {
     compileOnly deps.kotlin
+    compileOnly deps.lint.api
+    compileOnly lintJar(deps.databinding) { transitive = false }
+    compileOnly lintJar(deps.antlr) { transitive = false }
+
+    testImplementation deps.junit
+    testImplementation deps.lint.test
 }
