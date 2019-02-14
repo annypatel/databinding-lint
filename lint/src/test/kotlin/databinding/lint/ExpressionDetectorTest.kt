@@ -199,5 +199,43 @@ class ExpressionDetectorTest {
                 """.trimMargin()
             )
     }
-}
 
+    @Test
+    fun testLiteralOperator() {
+        lint("1")
+            .expect(
+                """
+                |res/layout/example.xml:5: Error: Literal in binding expression [LiteralOperator]
+                |    android:text="@{1}" />
+                |    ~~~~~~~~~~~~~~~~~~~
+                |1 errors, 0 warnings
+                """.trimMargin()
+            )
+    }
+
+    @Test
+    fun testMethodCallOperator() {
+        lint("a.b()")
+            .expect(
+                """
+                |res/layout/example.xml:5: Error: Method call in binding expression [MethodCallOperator]
+                |    android:text="@{a.b()}" />
+                |    ~~~~~~~~~~~~~~~~~~~~~~~
+                |1 errors, 0 warnings
+                """.trimMargin()
+            )
+    }
+
+    @Test
+    fun testGlobalMethodCallOperator() {
+        lint("a()")
+            .expect(
+                """
+                |res/layout/example.xml:5: Error: Global method call in binding expression [GlobalMethodCallOperator]
+                |    android:text="@{a()}" />
+                |    ~~~~~~~~~~~~~~~~~~~~~
+                |1 errors, 0 warnings
+                """.trimMargin()
+            )
+    }
+}

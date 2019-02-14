@@ -32,7 +32,10 @@ class ExpressionDetector : LayoutDetector() {
             NULL_COALESCING to issue("NullCoalescingOperator", "Null Coalescing operator"),
             CLASS_EXTRACTION to issue("ClassExtractionOperator", "Class Extraction operator"),
             GROUPING to issue("GroupOperator", "Group operator"),
-            BRACKET to issue("BracketOperator", "Bracket operator")
+            BRACKET to issue("BracketOperator", "Bracket operator"),
+            LITERAL to issue("LiteralOperator", "Literal"),
+            METHOD to issue("MethodCallOperator", "Method call"),
+            GLOBAL_METHOD to issue("GlobalMethodCallOperator", "Global method call")
         )
 
         private fun issue(id: String, name: String) = Issue.create(
