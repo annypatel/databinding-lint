@@ -1,6 +1,7 @@
 package databinding.lint
 
 import org.hamcrest.CoreMatchers.hasItem
+import org.hamcrest.CoreMatchers.not
 import org.junit.Assert.assertThat
 import org.junit.Test
 
@@ -91,5 +92,35 @@ class ExpressionParserTest {
     @Test
     fun testBracketOpType() {
         assertThat(opTypes("a[b]"), hasItem(BRACKET))
+    }
+
+    @Test
+    fun testLiteralOpTypes() {
+        assertThat(opTypes("1"), hasItem(LITERAL))
+        assertThat(opTypes("0b1"), hasItem(LITERAL))
+        assertThat(opTypes("01"), hasItem(LITERAL))
+        assertThat(opTypes("0x1"), hasItem(LITERAL))
+        assertThat(opTypes("1.1"), hasItem(LITERAL))
+        assertThat(opTypes("true"), hasItem(LITERAL))
+        assertThat(opTypes("'a'"), hasItem(LITERAL))
+        assertThat(opTypes("\"abc\""), hasItem(LITERAL))
+    }
+
+    @Test
+    fun testGlobalMethodOpTypes() {
+        assertThat(opTypes("a()"), hasItem(GLOBAL_METHOD))
+        assertThat(opTypes("a(x)"), hasItem(GLOBAL_METHOD))
+    }
+
+    @Test
+    fun testMethodOpTypes() {
+        assertThat(opTypes("a.b()"), hasItem(METHOD))
+        assertThat(opTypes("a.b(x)"), hasItem(METHOD))
+    }
+
+    @Test
+    fun testLambdaOpTypes() {
+        assertThat(opTypes("() -> a.b()"), not(hasItem(METHOD)))
+        assertThat(opTypes("(x) -> a.b(x)"), not(hasItem(METHOD)))
     }
 }

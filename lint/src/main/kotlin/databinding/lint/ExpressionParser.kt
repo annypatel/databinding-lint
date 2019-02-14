@@ -10,9 +10,13 @@ import android.databinding.parser.BindingExpressionParser.BracketOpContext
 import android.databinding.parser.BindingExpressionParser.CastOpContext
 import android.databinding.parser.BindingExpressionParser.ClassExtractionContext
 import android.databinding.parser.BindingExpressionParser.ComparisonOpContext
+import android.databinding.parser.BindingExpressionParser.GlobalMethodInvocationContext
 import android.databinding.parser.BindingExpressionParser.GroupingContext
 import android.databinding.parser.BindingExpressionParser.InstanceOfOpContext
+import android.databinding.parser.BindingExpressionParser.LambdaExpressionContext
+import android.databinding.parser.BindingExpressionParser.LiteralContext
 import android.databinding.parser.BindingExpressionParser.MathOpContext
+import android.databinding.parser.BindingExpressionParser.MethodInvocationContext
 import android.databinding.parser.BindingExpressionParser.QuestionQuestionOpContext
 import android.databinding.parser.BindingExpressionParser.TernaryOpContext
 import android.databinding.parser.BindingExpressionParser.UnaryOpContext
@@ -33,6 +37,9 @@ val NULL_COALESCING = OpType.of(QuestionQuestionOpContext::class)
 val CLASS_EXTRACTION = OpType.of(ClassExtractionContext::class)
 val GROUPING = OpType.of(GroupingContext::class)
 val BRACKET = OpType.of(BracketOpContext::class)
+val LITERAL = OpType.of(LiteralContext::class)
+val METHOD = OpType.of(MethodInvocationContext::class)
+val GLOBAL_METHOD = OpType.of(GlobalMethodInvocationContext::class)
 
 /**
  * Parser for data binding expressions.
@@ -72,12 +79,21 @@ class ExpressionParser {
         override fun visitClassExtraction(ctx: ClassExtractionContext) = report(ctx)
         override fun visitGrouping(ctx: GroupingContext) = report(ctx)
         override fun visitBracketOp(ctx: BracketOpContext) = report(ctx)
+        override fun visitLiteral(ctx: LiteralContext) = report(ctx)
+        override fun visitGlobalMethodInvocation(ctx: GlobalMethodInvocationContext) = report(ctx)
+        override fun visitMethodInvocation(ctx: MethodInvocationContext) = reportIfNotLambda(ctx)
 
-        private fun report(ctx: ParserRuleContext): List<OpType> {
-            return mutableListOf(OpType.of(ctx)).apply {
-                addAll(super.visitChildren(ctx))
+        private fun reportIfNotLambda(ctx: ParserRuleContext): List<OpType> =
+            if (ctx.parent is LambdaExpressionContext) {
+                visitChildren(ctx)
+            } else {
+                report(ctx)
             }
-        }
+
+        private fun report(ctx: ParserRuleContext): List<OpType> =
+            mutableListOf(OpType.of(ctx)).apply {
+                addAll(visitChildren(ctx))
+            }
     }
 
     open class BindingExpressionListVisitor : BindingExpressionBaseVisitor<List<OpType>>() {
