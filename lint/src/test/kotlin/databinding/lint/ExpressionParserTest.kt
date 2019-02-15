@@ -110,16 +110,14 @@ class ExpressionParserTest {
     fun testGlobalMethodOpTypes() {
         assertThat(opTypes("a()"), hasItem(GLOBAL_METHOD))
         assertThat(opTypes("a(x)"), hasItem(GLOBAL_METHOD))
+        assertThat(opTypes("() -> b()"), not(hasItem(GLOBAL_METHOD)))
+        assertThat(opTypes("(x) -> b(x)"), not(hasItem(GLOBAL_METHOD)))
     }
 
     @Test
     fun testMethodOpTypes() {
         assertThat(opTypes("a.b()"), hasItem(METHOD))
         assertThat(opTypes("a.b(x)"), hasItem(METHOD))
-    }
-
-    @Test
-    fun testLambdaOpTypes() {
         assertThat(opTypes("() -> a.b()"), not(hasItem(METHOD)))
         assertThat(opTypes("(x) -> a.b(x)"), not(hasItem(METHOD)))
     }

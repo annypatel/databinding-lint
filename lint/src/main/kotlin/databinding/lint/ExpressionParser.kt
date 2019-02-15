@@ -80,7 +80,7 @@ class ExpressionParser {
         override fun visitGrouping(ctx: GroupingContext) = report(ctx)
         override fun visitBracketOp(ctx: BracketOpContext) = report(ctx)
         override fun visitLiteral(ctx: LiteralContext) = report(ctx)
-        override fun visitGlobalMethodInvocation(ctx: GlobalMethodInvocationContext) = report(ctx)
+        override fun visitGlobalMethodInvocation(ctx: GlobalMethodInvocationContext) = reportIfNotLambda(ctx)
         override fun visitMethodInvocation(ctx: MethodInvocationContext) = reportIfNotLambda(ctx)
 
         private fun reportIfNotLambda(ctx: ParserRuleContext): List<OpType> =
