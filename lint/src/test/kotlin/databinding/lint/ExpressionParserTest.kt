@@ -104,6 +104,7 @@ class ExpressionParserTest {
         assertThat(opTypes("true"), hasItem(LITERAL))
         assertThat(opTypes("'a'"), hasItem(LITERAL))
         assertThat(opTypes("\"abc\""), hasItem(LITERAL))
+        assertThat(opTypes("null"), hasItem(LITERAL))
     }
 
     @Test
