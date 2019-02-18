@@ -201,7 +201,7 @@ class ExpressionDetectorTest {
     }
 
     @Test
-    fun testLiteralOperator() {
+    fun testLiteralExpression() {
         lint("1")
             .expect(
                 """
@@ -214,7 +214,7 @@ class ExpressionDetectorTest {
     }
 
     @Test
-    fun testMethodCallOperator() {
+    fun testMethodCallExpression() {
         lint("a.b()")
             .expect(
                 """
@@ -227,7 +227,7 @@ class ExpressionDetectorTest {
     }
 
     @Test
-    fun testGlobalMethodCallOperator() {
+    fun testGlobalMethodCallExpression() {
         lint("a()")
             .expect(
                 """
@@ -237,5 +237,46 @@ class ExpressionDetectorTest {
                 |1 errors, 0 warnings
                 """.trimMargin()
             )
+    }
+
+    @Test
+    fun testDotOperator() {
+        lint("a.b").expectClean()
+        lint("a.b.c").expectClean()
+    }
+
+    @Test
+    fun testResourceExpression() {
+        lint("@string/a").expectClean()
+        lint("@string/a(b)").expectClean()
+        lint("@plurals/a(b)").expectClean()
+        lint("@color/a").expectClean()
+        lint("@dimen/a").expectClean()
+        lint("@drawable/a").expectClean()
+        lint("@layout/a").expectClean()
+        lint("@anim/a").expectClean()
+        lint("@id/a").expectClean()
+        lint("@integer/a").expectClean()
+        lint("@bool/a").expectClean()
+
+        lint("@stringArray/a").expectClean()
+        lint("@intArray/a").expectClean()
+        lint("@typedArray/a").expectClean()
+        lint("@animator/a").expectClean()
+        lint("@stateListAnimator/a").expectClean()
+        lint("@colorStateList/a").expectClean()
+    }
+
+    @Test
+    fun testLambdaExpression() {
+        lint("() -> a.b()").expectClean()
+        lint("(x) -> a.b(x)").expectClean()
+        lint("() -> b()").expectClean()
+        lint("(x) -> b(x)").expectClean()
+    }
+
+    @Test
+    fun testFunctionalReferenceExpression() {
+        lint("a::b").expectClean()
     }
 }
