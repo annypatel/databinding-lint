@@ -149,19 +149,6 @@ class ExpressionDetectorTest {
     }
 
     @Test
-    fun testClassExtractionOperator() {
-        lint("a.class")
-            .expect(
-                """
-                |res/layout/example.xml:5: Error: Class Extraction operator in binding expression [ClassExtractionOperator]
-                |    android:text="@{a.class}" />
-                |    ~~~~~~~~~~~~~~~~~~~~~~~~~
-                |1 errors, 0 warnings
-                """.trimMargin()
-            )
-    }
-
-    @Test
     fun testNullCoalescingOperator() {
         lint("a ?? b")
             .expect(
@@ -201,11 +188,24 @@ class ExpressionDetectorTest {
     }
 
     @Test
+    fun testClassExtractionExpression() {
+        lint("a.class")
+            .expect(
+                """
+                |res/layout/example.xml:5: Error: Class extraction in binding expression [ClassExtractionExpression]
+                |    android:text="@{a.class}" />
+                |    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                |1 errors, 0 warnings
+                """.trimMargin()
+            )
+    }
+
+    @Test
     fun testLiteralExpression() {
         lint("1")
             .expect(
                 """
-                |res/layout/example.xml:5: Error: Literal in binding expression [LiteralOperator]
+                |res/layout/example.xml:5: Error: Literal in binding expression [LiteralExpression]
                 |    android:text="@{1}" />
                 |    ~~~~~~~~~~~~~~~~~~~
                 |1 errors, 0 warnings
@@ -218,7 +218,7 @@ class ExpressionDetectorTest {
         lint("a.b()")
             .expect(
                 """
-                |res/layout/example.xml:5: Error: Method call in binding expression [MethodCallOperator]
+                |res/layout/example.xml:5: Error: Method call in binding expression [MethodCallExpression]
                 |    android:text="@{a.b()}" />
                 |    ~~~~~~~~~~~~~~~~~~~~~~~
                 |1 errors, 0 warnings
@@ -231,7 +231,7 @@ class ExpressionDetectorTest {
         lint("a()")
             .expect(
                 """
-                |res/layout/example.xml:5: Error: Global method call in binding expression [GlobalMethodCallOperator]
+                |res/layout/example.xml:5: Error: Global method call in binding expression [GlobalMethodCallExpression]
                 |    android:text="@{a()}" />
                 |    ~~~~~~~~~~~~~~~~~~~~~
                 |1 errors, 0 warnings
@@ -246,7 +246,7 @@ class ExpressionDetectorTest {
     }
 
     @Test
-    fun testResourceExpression() {
+    fun testResourceExpressions() {
         lint("@string/a").expectClean()
         lint("@string/a(b)").expectClean()
         lint("@plurals/a(b)").expectClean()
@@ -268,7 +268,7 @@ class ExpressionDetectorTest {
     }
 
     @Test
-    fun testLambdaExpression() {
+    fun testLambdaExpressions() {
         lint("() -> a.b()").expectClean()
         lint("(x) -> a.b(x)").expectClean()
         lint("() -> b()").expectClean()

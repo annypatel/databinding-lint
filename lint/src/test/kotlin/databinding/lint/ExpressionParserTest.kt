@@ -80,11 +80,6 @@ class ExpressionParserTest {
     }
 
     @Test
-    fun testClassExtractionOpType() {
-        assertThat(opTypes("a.class"), hasItem(CLASS_EXTRACTION))
-    }
-
-    @Test
     fun testGroupingOpType() {
         assertThat(opTypes("(a + b)"), hasItem(GROUPING))
     }
@@ -92,6 +87,11 @@ class ExpressionParserTest {
     @Test
     fun testBracketOpType() {
         assertThat(opTypes("a[b]"), hasItem(BRACKET))
+    }
+
+    @Test
+    fun testClassExtractionOpType() {
+        assertThat(opTypes("a.class"), hasItem(CLASS_EXTRACTION))
     }
 
     @Test
@@ -108,18 +108,18 @@ class ExpressionParserTest {
     }
 
     @Test
-    fun testGlobalMethodOpTypes() {
-        assertThat(opTypes("a()"), hasItem(GLOBAL_METHOD))
-        assertThat(opTypes("a(x)"), hasItem(GLOBAL_METHOD))
-        assertThat(opTypes("() -> b()"), not(hasItem(GLOBAL_METHOD)))
-        assertThat(opTypes("(x) -> b(x)"), not(hasItem(GLOBAL_METHOD)))
-    }
-
-    @Test
-    fun testMethodOpTypes() {
+    fun testMethodCallOpTypes() {
         assertThat(opTypes("a.b()"), hasItem(METHOD))
         assertThat(opTypes("a.b(x)"), hasItem(METHOD))
         assertThat(opTypes("() -> a.b()"), not(hasItem(METHOD)))
         assertThat(opTypes("(x) -> a.b(x)"), not(hasItem(METHOD)))
+    }
+
+    @Test
+    fun testGlobalMethodCallOpTypes() {
+        assertThat(opTypes("a()"), hasItem(GLOBAL_METHOD))
+        assertThat(opTypes("a(x)"), hasItem(GLOBAL_METHOD))
+        assertThat(opTypes("() -> b()"), not(hasItem(GLOBAL_METHOD)))
+        assertThat(opTypes("(x) -> b(x)"), not(hasItem(GLOBAL_METHOD)))
     }
 }
