@@ -10,7 +10,7 @@ The Data Binding Library allows you to bind UI components in your layouts to dat
 Download the latest artifact from Maven central at following coordinates:
 
 ```groovy
-implementation 'com.github.annypatel.databinding:lint-checks:1.0.0-alpha1'
+implementation 'com.github.annypatel.databinding:lint-checks:1.0.0-alpha2'
 ```
 
 ## Lint Checks
