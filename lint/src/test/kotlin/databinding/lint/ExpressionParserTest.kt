@@ -2,7 +2,7 @@ package databinding.lint
 
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.CoreMatchers.not
-import org.junit.Assert.assertThat
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 class ExpressionParserTest {

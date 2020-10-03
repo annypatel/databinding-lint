@@ -57,12 +57,12 @@ if (isAndroid) {
 
     task javadocJar(type: Jar, dependsOn: dokka) {
         from dokka.outputDirectory
-        classifier = 'javadoc'
+        setArchiveClassifier('javadoc')
     }
 
     task sourcesJar(type: Jar) {
         from android.sourceSets.main.java.srcDirs
-        classifier = 'sources'
+        setArchiveClassifier('sources')
     }
 } else {
 
@@ -72,12 +72,12 @@ if (isAndroid) {
     }
 
     task javadocJar(type: Jar, dependsOn: dokka) {
-        classifier = 'javadoc'
+        setArchiveClassifier('javadoc')
         from dokka.outputDirectory
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
+        setArchiveClassifier('sources')
         from sourceSets.main.allSource
     }
 }
